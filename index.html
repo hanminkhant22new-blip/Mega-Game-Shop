@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEGA GAME SHOP</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#07130d;
+  color:white;
+}
+header{
+  padding:25px 15px;
+  text-align:center;
+  background:linear-gradient(135deg,#00a86b,#063b28);
+}
+header h1{
+  margin:0;
+  font-size:32px;
+}
+header p{margin:8px 0 0}
+.container{
+  padding:20px;
+  max-width:600px;
+  margin:auto;
+}
+.card{
+  background:#10251b;
+  border:1px solid #1d6244;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:15px;
+}
+.game{
+  width:100%;
+  padding:18px;
+  margin:8px 0;
+  border:0;
+  border-radius:12px;
+  background:#123d2b;
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+}
+.game:active{transform:scale(.98)}
+.hidden{display:none}
+.package{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#0b1c14;
+  padding:13px;
+  margin:8px 0;
+  border-radius:10px;
+}
+.package button{
+  background:#00b875;
+  color:white;
+  border:0;
+  border-radius:8px;
+  padding:9px 14px;
+}
+input,select{
+  width:100%;
+  padding:13px;
+  margin:7px 0 12px;
+  border-radius:9px;
+  border:1px solid #287653;
+  background:#07130d;
+  color:white;
+}
+.submit{
+  width:100%;
+  padding:15px;
+  background:#00b875;
+  color:white;
+  border:0;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+}
+.back{
+  background:#444;
+  margin-bottom:12px;
+}
+#result{
+  text-align:center;
+  background:#123d2b;
+  padding:20px;
+  border-radius:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>MEGA GAME SHOP</h1>
+  <p>Game Top Up Service</p>
+</header>
+
+<div class="container">
+
+<div id="home" class="card">
+  <h2> Game ရွေးပါ</h2>
+
+  <button class="game" onclick="selectGame('Mobile Legends')">
+     Mobile Legends
+  </button>
+
+  <button class="game" onclick="selectGame('PUBG Mobile')">
+     PUBG Mobile
+  </button>
+
+  <button class="game" onclick="selectGame('Magic Chess Go Go')">
+     Magic Chess Go Go
+  </button>
+
+  <button class="game" onclick="selectGame('MLBB Ban Server')">
+     Mobile Legends Ban Server
+  </button>
+</div>
+
+<div id="packages" class="card hidden">
+  <button class="game back" onclick="goHome()"> နောက်သို့</button>
+
+  <h2 id="gameTitle"></h2>
+  <div id="packageList"></div>
+</div>
+
+<div id="order" class="card hidden">
+  <button class="game back" onclick="backPackages()"> နောက်သို့</button>
+
+  <h2> Order တင်ရန်</h2>
+
+  <p id="selectedPackage"></p>
+
+  <label>Game ID</label>
+  <input id="gameId" placeholder="Game ID ထည့်ပါ">
+
+  <label>Server ID</label>
+  <input id="serverId" placeholder="Server ID ထည့်ပါ">
+
+  <label>Payment Method</label>
+  <select id="payment">
+    <option>KBZPay</option>
+    <option>WavePay</option>
+  </select>
+
+  <label>ငွေလွှဲပြေစာ Screenshot</label>
+  <input id="receipt" type="file" accept="image/*">
+
+  <button class="submit" onclick="submitOrder()">
+     Order တင်မည်
+  </button>
+</div>
+
+<div id="result" class="hidden"></div>
+
+</div>
+
+<script>
+
+let currentGame="";
+let currentPackage="";
+let currentPrice="";
+
+const prices={
+"Mobile Legends":[
+["11 Diamonds","800"],["22 Diamonds","1600"],["56 Diamonds","4100"],
+["86 Diamonds","4750"],["112 Diamonds","7800"],["172 Diamonds","9500"],
+["257 Diamonds","13600"],["343 Diamonds","18500"],["429 Diamonds","23000"],
+["514 Diamonds","27500"],["600 Diamonds","32000"],["706 Diamonds","37000"],
+["878 Diamonds","46500"],["963 Diamonds","51000"],["1049 Diamonds","56000"],
+["1135 Diamonds","59500"],["1412 Diamonds","74000"],["2195 Diamonds","114000"],
+["3688 Diamonds","187000"],["5532 Diamonds","282000"],["9288 Diamonds","465000"],
+["11483 Diamonds","576000"],["Twilight Pass","30800"],
+["Weekly Elite","3100"],["Monthly Epic","15300"]
+],
+
+"PUBG Mobile":[
+["60 UC","4000"],["120 UC","8000"],["180 UC","12000"],
+["325 UC","20000"],["385 UC","24000"],["660 UC","41000"],
+["720 UC","44000"],["1800 UC","99000"],["3850 UC","200000"],
+["8100 UC","390000"]
+],
+
+"Magic Chess Go Go":[
+["5 Diamonds","450"],["11 Diamonds","800"],["22 Diamonds","1600"],
+["33 Diamonds","2400"],["50 Diamonds","3400"],["86 Diamonds","5300"],
+["172 Diamonds","10200"],["257 Diamonds","15900"],["344 Diamonds","21250"],
+["516 Diamonds","31900"],["706 Diamonds","42500"],["1346 Diamonds
